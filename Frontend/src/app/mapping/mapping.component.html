@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Functoid Test Paneli</h2>
+
+  <!-- Tekli Gönderme Formu -->
+  <form (ngSubmit)="onSubmit()" class="card p-4 shadow-sm mb-5">
+    <h5 class="mb-3">🔹 Tekli Functoid Testi</h5>
+
+    <div class="mb-3">
+      <label for="functoidType" class="form-label">Functoid Türü</label>
+      <select class="form-select" id="functoidType" name="functoidType" [(ngModel)]="formData.functoidType" required>
+        <option *ngFor="let type of functoidTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Inputs (JSON formatı)</label>
+      <input type="text" class="form-control" name="inputs" [(ngModel)]="inputsString" placeholder='["HelloWorld", 5]' required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Parametreler (JSON formatı)</label>
+      <textarea class="form-control" rows="3" name="parameters" [(ngModel)]="parametersString" placeholder='{ "Direction": "right" }'></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Gönder</button>
+  </form>
+
+  <!-- Zincirli Gönderme Alanı -->
+  <div class="card p-4 shadow-sm">
+    <h5 class="mb-3">🔗 Zincirli Functoid Akışı</h5>
+
+    <div class="mb-3">
+      <label class="form-label">Zincir Girdisi (JSON formatı)</label>
+      <textarea class="form-control" [(ngModel)]="chainFlowInput" rows="8" placeholder='[
+  {
+    "functoidType": "StringTrim",
+    "inputs": ["   Merhaba Dünya   "]
+  },
+  {
+    "functoidType": "StringLeftOrRight",
+    "parameters": { "Direction": "left", "Count": 7 }
+  },
+  {
+    "functoidType": "Size"
+  }
+]'></textarea>
+    </div>
+
+    <button class="btn btn-success w-100" (click)="onChainedSubmit()">Zincirli Çalıştır</button>
+  </div>
+
+  <!-- Zincirli Adım Sonuçları -->
+  <div *ngIf="allStepsOutput.length > 0" class="alert alert-secondary mt-4">
+    <h5>🧮 Adım Sonuçları:</h5>
+    <ul class="mb-2">
+      <li *ngFor="let step of allStepsOutput">
+        <strong>{{ step.step }}. {{ step.functoid }}:</strong>
+        <code>{{ formatResult(step.result) }}</code>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Sonuç -->
+  <div *ngIf="result !== null" class="alert alert-info mt-3">
+    <strong>🚀 Nihai Sonuç:</strong>
+    <pre>{{ formatResult(result) }}</pre>
+  </div>
+</div>
